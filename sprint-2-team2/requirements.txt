@@ -1,0 +1,2 @@
+supabase>=2.0   # only for db_runner.py / run_all.py; the engine itself uses the standard library
+pytest          # tests

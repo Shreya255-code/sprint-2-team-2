@@ -1,0 +1,238 @@
+{
+  "_about": "Document requirements. verification: NHA = quoted from an NHA publication; STATE_ADVISORY = state-level advisory, may not apply to your state; PROVISIONAL = team assumption that MUST be confirmed against the package STG. Only NHA and STATE_ADVISORY items are reported as missing mandatory documents.",
+  "sources": {
+    "HBP22": "NHA HBP 2.2 User Guidelines, https://nha.gov.in/img/resources/HBP-2.2-manual.pdf",
+    "CAM20": "NHA Claims Adjudication Manual 2.0, https://sha.kerala.gov.in/wp-content/uploads/2022/08/Claims-Adjudication-Manual-2_0-final.pdf",
+    "ADVISORY": "Advisory for Empanelled Hospitals regarding claim processing (appears to be Haryana), https://cdnbbsr.s3waas.gov.in/s3169779d3852b32ce8b1a1724dbf5217d/uploads/2024/09/20240925219433972.pdf",
+    "TEAM": "Team assumption / project review document. Not an official source."
+  },
+  "rules": [
+    {
+      "id": "patient_photo",
+      "label": "Patient photograph",
+      "applies_to": [
+        "*"
+      ],
+      "stage": "PREAUTH",
+      "verification": "NHA",
+      "source": "CAM20",
+      "ref": "4.5.1",
+      "evidence": "patient_photo"
+    },
+    {
+      "id": "clinical_notes",
+      "label": "Clinical documents supporting the diagnosis",
+      "applies_to": [
+        "*"
+      ],
+      "stage": "PREAUTH",
+      "verification": "NHA",
+      "source": "CAM20",
+      "ref": "4.5.1",
+      "evidence": "clinical_notes"
+    },
+    {
+      "id": "discharge_summary",
+      "label": "Discharge summary",
+      "applies_to": [
+        "*"
+      ],
+      "stage": "CLAIM",
+      "verification": "NHA",
+      "source": "CAM20",
+      "ref": "3",
+      "evidence": "discharge_summary"
+    },
+    {
+      "id": "iol_barcode",
+      "label": "IOL lens barcode / sticker",
+      "applies_to": [
+        "SE020"
+      ],
+      "stage": "CLAIM",
+      "verification": "NHA",
+      "source": "HBP22",
+      "ref": "3.14",
+      "evidence": "iol_sticker"
+    },
+    {
+      "id": "stage_photos",
+      "label": "Photos before, during and after treatment",
+      "applies_to": [
+        "SE020"
+      ],
+      "stage": "CLAIM",
+      "verification": "STATE_ADVISORY",
+      "source": "ADVISORY",
+      "ref": "",
+      "evidence": "treatment_photos"
+    },
+    {
+      "id": "haemoglobin",
+      "label": "Haemoglobin report (not older than 30 days)",
+      "applies_to": [
+        "SE020"
+      ],
+      "stage": "PREAUTH",
+      "verification": "STATE_ADVISORY",
+      "source": "ADVISORY",
+      "ref": "",
+      "evidence": "haemoglobin",
+      "max_age_days": 30
+    },
+    {
+      "id": "rft",
+      "label": "Renal function test with serum creatinine (not older than 30 days)",
+      "applies_to": [
+        "SE020"
+      ],
+      "stage": "PREAUTH",
+      "verification": "STATE_ADVISORY",
+      "source": "ADVISORY",
+      "ref": "",
+      "evidence": "renal_function",
+      "max_age_days": 30
+    },
+    {
+      "id": "biometry",
+      "label": "Biometry (A-scan / keratometry) report",
+      "applies_to": [
+        "SE020"
+      ],
+      "stage": "PREAUTH",
+      "verification": "PROVISIONAL",
+      "source": "TEAM",
+      "ref": "",
+      "evidence": "biometry"
+    },
+    {
+      "id": "ecg",
+      "label": "ECG report",
+      "applies_to": [
+        "SE020"
+      ],
+      "stage": "PREAUTH",
+      "verification": "PROVISIONAL",
+      "source": "TEAM",
+      "ref": "",
+      "evidence": "ecg"
+    },
+    {
+      "id": "operative_note",
+      "label": "Operative notes",
+      "applies_to": [
+        "SE020",
+        "SB039",
+        "SG017",
+        "SG050",
+        "SG039",
+        "SB019"
+      ],
+      "stage": "CLAIM",
+      "verification": "PROVISIONAL",
+      "source": "TEAM",
+      "ref": "",
+      "evidence": "operative_note"
+    },
+    {
+      "id": "chest_imaging",
+      "label": "Chest X-ray report",
+      "applies_to": [
+        "MG016",
+        "MG017"
+      ],
+      "stage": "PREAUTH",
+      "verification": "PROVISIONAL",
+      "source": "TEAM",
+      "ref": "",
+      "evidence": "chest_xray"
+    },
+    {
+      "id": "spine_mri",
+      "label": "MRI report",
+      "applies_to_name_contains": [
+        "spine",
+        "laminectomy",
+        "discectomy"
+      ],
+      "applies_to": [],
+      "stage": "PREAUTH",
+      "verification": "PROVISIONAL",
+      "source": "TEAM",
+      "ref": "",
+      "evidence": "mri"
+    },
+    {
+      "id": "consent",
+      "label": "Signed surgical consent",
+      "applies_to": [
+        "SG050",
+        "SG017",
+        "SG039",
+        "SB019"
+      ],
+      "stage": "PREAUTH",
+      "verification": "PROVISIONAL",
+      "source": "TEAM",
+      "ref": "",
+      "evidence": "consent"
+    },
+    {
+      "id": "usg",
+      "label": "USG abdomen report",
+      "applies_to": [
+        "SG017",
+        "SG039"
+      ],
+      "stage": "PREAUTH",
+      "verification": "PROVISIONAL",
+      "source": "TEAM",
+      "ref": "",
+      "evidence": "usg_abdomen"
+    },
+    {
+      "id": "xray",
+      "label": "X-ray report (before and after surgery)",
+      "applies_to": [
+        "SB019"
+      ],
+      "stage": "CLAIM",
+      "verification": "PROVISIONAL",
+      "source": "TEAM",
+      "ref": "",
+      "evidence": "xray"
+    },
+    {
+      "id": "implant",
+      "label": "Implant sticker / invoice",
+      "applies_to": [
+        "SB019"
+      ],
+      "stage": "CLAIM",
+      "verification": "PROVISIONAL",
+      "source": "TEAM",
+      "ref": "",
+      "evidence": "implant_sticker"
+    },
+    {
+      "id": "hpe",
+      "label": "Histopathology report",
+      "applies_to": [
+        "SG017",
+        "SG039"
+      ],
+      "stage": "CLAIM",
+      "verification": "PROVISIONAL",
+      "source": "TEAM",
+      "ref": "",
+      "evidence": "histopathology"
+    }
+  ],
+  "preauth_by_specialty": {
+    "SE": {
+      "status": "mandatory",
+      "source": "HBP22",
+      "ref": "3.14"
+    }
+  }
+}

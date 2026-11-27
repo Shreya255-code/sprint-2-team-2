@@ -1,0 +1,112 @@
+{
+  "phrases": {
+    "without exploration of cbd": "nonexploration cbd",
+    "without cbd exploration": "nonexploration cbd",
+    "inguinal hernia": "groin hernia inguinal",
+    "phaco emulsification": "phacoemulsification",
+    "phaco": "phacoemulsification",
+    "non foldable": "nonfoldable",
+    "non-foldable": "nonfoldable",
+    "intra ocular lens": "iol",
+    "intraocular lens": "iol",
+    "pciol": "iol",
+    "foldable ol": "foldable iol",
+    "total knee arthroplasty": "total knee replacement",
+    "tkr": "total knee replacement",
+    "lap": "laparoscopic",
+    "appendectomy": "appendicectomy",
+    "paediatric": "pediatric",
+    "x ray": "xray",
+    "x-ray": "xray"
+  },
+  "strip_phrases": [
+    "under local anaesthesia",
+    "under general anaesthesia",
+    "under topical anaesthesia",
+    "under spinal anaesthesia",
+    "clear corneal",
+    "community acquired",
+    "community-acquired",
+    "age related",
+    "age-related",
+    "right eye operated",
+    "laboratory test"
+  ],
+  "stopwords": [
+    "with",
+    "and",
+    "of",
+    "the",
+    "a",
+    "an",
+    "for",
+    "under",
+    "in",
+    "on",
+    "to",
+    "or",
+    "right",
+    "left",
+    "bilateral",
+    "eye",
+    "surgery",
+    "operation",
+    "procedure",
+    "performed",
+    "ta",
+    "cbc"
+  ],
+  "qualifiers": [
+    "foldable",
+    "nonfoldable",
+    "hydrophobic",
+    "hydrophilic",
+    "acrylic",
+    "severe",
+    "revision",
+    "primary",
+    "laparoscopic",
+    "open",
+    "pediatric",
+    "hemorrhagic",
+    "shock",
+    "exploration",
+    "nonexploration"
+  ],
+  "conflicts": [
+    [
+      "foldable",
+      "nonfoldable"
+    ],
+    [
+      "hydrophobic",
+      "hydrophilic"
+    ],
+    [
+      "revision",
+      "primary"
+    ],
+    [
+      "laparoscopic",
+      "open"
+    ],
+    [
+      "exploration",
+      "nonexploration"
+    ]
+  ],
+  "investigation_terms": [
+    "xray",
+    "complete blood count",
+    "cbc",
+    "blood test",
+    "ecg",
+    "ultrasound",
+    "usg",
+    "mri",
+    "ct scan",
+    "biometry",
+    "haemogram",
+    "urine"
+  ]
+}
