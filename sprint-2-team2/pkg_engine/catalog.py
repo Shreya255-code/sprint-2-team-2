@@ -1,12 +1,14 @@
 """Read-only view of Sprint 2 Team 1's NHA package database."""
 import math
+import os
 import sqlite3
 from collections import Counter, defaultdict
 from pathlib import Path
 
 from .normalize import normalize
 
-DEFAULT_DB = Path(__file__).parents[2] / "sprint-2-team1" / "data" / "final" / "nha_packages.sqlite3"
+DEFAULT_DB = Path(os.getenv("TEAM1_DB_PATH") or
+                  (Path(__file__).parents[2] / "sprint-2-team1" / "data" / "final" / "nha_packages.sqlite3"))
 
 
 class Catalog:

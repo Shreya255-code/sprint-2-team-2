@@ -1,4 +1,4 @@
-"""Import the per-case JSON files in sample_output into Supabase.
+"""Import per-case output into claims_cases.case_audit_summary.sprint2_team2.output.
 
 Preview without writes:
     python import_sample_output.py
@@ -6,7 +6,7 @@ Preview without writes:
 Write rows that are not already present:
     python import_sample_output.py --apply
 
-Replace existing values as well:
+Replace existing Team 2 output values as well:
     python import_sample_output.py --apply --force
 """
 import argparse
@@ -32,6 +32,9 @@ def load_outputs(directory=OUTPUT_DIR):
             item = json.load(stream)
         if not isinstance(item, dict) or not item.get("case_number"):
             raise ValueError(f"{path}: expected a JSON object with case_number")
+        match = item.get("package_match")
+        if not isinstance(match, dict) or not {"confidence_score", "candidates", "review_flags"}.issubset(match):
+            raise ValueError(f"{path}: regenerate output with confidence_score, candidates, and review_flags")
         case_number = item["case_number"]
         if case_number in seen:
             raise ValueError(f"Duplicate case_number {case_number!r} in sample_output")
@@ -41,31 +44,39 @@ def load_outputs(directory=OUTPUT_DIR):
 
 
 def import_outputs(sb, outputs, apply=False, force=False):
-    rows = (sb.table("package_matching_records")
-            .select("case_number").execute().data or [])
-    existing = {row["case_number"] for row in rows}
+    case_numbers = [item["case_number"] for _, item in outputs]
+    rows = (sb.table("claims_cases")
+            .select("case_id, case_number, case_audit_summary")
+            .in_("case_number", case_numbers).execute().data or [])
+    cases = {row["case_number"]: row for row in rows}
+    missing = sorted(set(case_numbers) - set(cases))
+    if missing:
+        raise ValueError("No claims_cases row found for: " + ", ".join(missing))
 
     saved = 0
     for path, item in outputs:
         number = item["case_number"]
-        if number in existing and not force:
-            print(f"{number}: already exists; skipped (use --force to replace)")
+        case = cases[number]
+        summary = case.get("case_audit_summary") or {}
+        if not isinstance(summary, dict):
+            raise ValueError(f"{number}: case_audit_summary is not a JSON object")
+        team2 = summary.get("sprint2_team2") or {}
+        if not isinstance(team2, dict):
+            raise ValueError(f"{number}: case_audit_summary.sprint2_team2 is not a JSON object")
+        if team2.get("output") is not None and not force:
+            print(f"{number}: Team 2 output already exists; skipped (use --force to replace)")
             continue
 
-        payload = {
-            "case_number": number,
-            "matching_output": item,
-            "source_file": path.name,
-        }
+        updated_team2 = dict(team2)
+        updated_team2["output"] = item
+        updated_summary = dict(summary)
+        updated_summary["sprint2_team2"] = updated_team2
         if apply:
-            if number in existing:
-                sb.table("package_matching_records").upsert(payload, on_conflict="case_number").execute()
-            else:
-                sb.table("package_matching_records").insert(payload).execute()
-                existing.add(number)
+            (sb.table("claims_cases").update({"case_audit_summary": updated_summary})
+             .eq("case_id", case["case_id"]).execute())
         saved += 1
         print(f"{number}: {'saved' if apply else 'ready to save'} from {path.name}")
-    print(f"{saved} output(s) {'written' if apply else 'matched (dry run; no database changes)'}")
+    print(f"{saved} output(s) {'written' if apply else 'ready (dry run; no database changes)'}")
     return saved
 
 

@@ -22,26 +22,26 @@ python run_all.py             # Squad 2 + 3 through orchestrator/, then this eng
 not test Squad 3's extraction.
 
 ## Output format
-`case_id`, `case_number`, `medication_number` (MRN), `diagnosis`, `procedure`, `hospital_name`, `package_match`, `completeness.requirements[]` (see `pkg_engine/report.py`).
-The divided sample files are stored in `package_matching_records.matching_output`.
+`case_id`, `case_number`, `medication_number` (MRN), `diagnosis`, `procedure`, `hospital_name`, `package_match`, and `completeness.requirements[]` (see `pkg_engine/report.py`). `package_match` includes the hand-tuned `confidence_score`, ranked candidate details, and review flags. The score is not a probability. The original `case_id` is retained.
 
 `python run_bundles.py <bundle_dir> <patients_dir> <output_dir>` runs on Sprint 1 output files and writes one JSON per patient.
 
 ## Database
-The Supabase project currently has the NHA `investigation_review_queue` table but no
-`claims_cases` or `claim_documents` tables. Team 2's divided output therefore uses a
-separate `package_matching_records` table. Apply
-`supabase/migrations/20261128_add_package_matching_results.sql` in the Supabase SQL Editor
-before importing the sample output. The table has a unique `case_number`, stores each full
-JSON object in `matching_output`, and has row-level security enabled.
+The shared integration target is the **AI_Prior_Authorization** Supabase project:
+`claims_cases.case_audit_summary.sprint2_team2.output`. No schema migration is needed for
+that existing table and JSONB column. Both `db_runner.py` and `import_sample_output.py` write
+only the Team 2 JSON path and preserve the case row UUID and other `case_audit_summary` keys.
 
-`db_runner.py` is an optional adapter for deployments that separately provide the Sprint 1
-`claims_cases` and `claim_documents` schema; it writes to `case_audit_summary.sprint2_team2`.
+Set `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` for that project. Run `python import_sample_output.py`
+to preview, `python import_sample_output.py --apply` to write only
+missing Team 2 outputs, or add `--force` to replace existing Team 2 output JSON. The importer
+matches records by `case_number`, stores the source `case_id` unchanged inside `output`, and
+stops before writing if a case number has no matching `claims_cases` row. `db_runner.py`
+evaluates completed Sprint 1 cases and writes the same JSON path.
 
-To load the per-case JSON files in `sample_output/`, set `SUPABASE_URL` and
-`SUPABASE_SERVICE_KEY`, then run `python import_sample_output.py` for a preview or
-`python import_sample_output.py --apply` to write the files. The importer matches by
-`case_number` and skips rows already present; use `--apply --force` only to replace them.
+The package catalog is supplied by Team 1. By default, the engine looks for
+`sprint-2-team1/data/final/nha_packages.sqlite3` beside this repo; set `TEAM1_DB_PATH` if the
+catalog lives elsewhere. Tests and local runs need that database available.
 
 ## How matching works
 1. Normalize: abbreviations, OCR slips, anaesthesia wording, laterality (`config/terminology.json`).
@@ -64,8 +64,9 @@ calibrated against labelled claims.
 | `PROVISIONAL` | team assumption | no, "recommended" only |
 | `TEAM1_DB` | mandatory rows Team 1 adds later | shown for manual check |
 
-The package-specific Standard Treatment Guideline for cataract was **not** obtained, and Team 1's
-database holds no document or investigation requirements. So the best document status is
+The package-specific Standard Treatment Guideline for cataract was **not** obtained, and the
+catalog used here may not yet hold package-specific document or investigation requirements.
+So the best document status is
 `KNOWN_REQUIREMENTS_MET`, never "complete". Confirm `config/requirements.json` against the STGs in
 your state's TMS before real use. HBP 2.2 is cited for rules while Team 1's catalogue is HBP 2022.
 

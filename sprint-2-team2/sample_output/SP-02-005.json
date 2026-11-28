@@ -7,7 +7,53 @@
   "hospital_name": "APOLLO ORTHO CENTRE",
   "package_match": {
     "status": "MATCHED",
-    "selected_package_code": "SB019"
+    "selected_package_code": "SB019",
+    "confidence_score": 0.917,
+    "candidates": [
+      {
+        "input": "ORIF Intertrochanteric Fracture with Dynamic Hip Screw",
+        "term_match_status": "MATCHED",
+        "package_code": "SB019",
+        "package_name": "Fracture - Neck Femur",
+        "procedure_code": "SB019B",
+        "procedure_name": "ORIF Intertrochanteric Fracture with Dynamic Hip Screw",
+        "confidence_score": 0.917,
+        "reasons": [
+          "term agreement 1.00",
+          "diagnosis supports package name 0.67"
+        ],
+        "unconfirmed_attributes": []
+      },
+      {
+        "input": "ORIF Intertrochanteric Fracture with Dynamic Hip Screw",
+        "term_match_status": "MATCHED",
+        "package_code": "SB019",
+        "package_name": "Fracture - Neck Femur",
+        "procedure_code": "SB019C",
+        "procedure_name": "ORIF Intertrochanteric Fracture with Proximal Femoral Nail",
+        "confidence_score": 0.512,
+        "reasons": [
+          "term agreement 0.46",
+          "diagnosis supports package name 0.67"
+        ],
+        "unconfirmed_attributes": []
+      },
+      {
+        "input": "ORIF Intertrochanteric Fracture with Dynamic Hip Screw",
+        "term_match_status": "MATCHED",
+        "package_code": "SB015",
+        "package_name": "Fracture Condyle - Humerus - ORIF",
+        "procedure_code": "SB015C",
+        "procedure_name": "ORIF with screw of proximal humerus",
+        "confidence_score": 0.394,
+        "reasons": [
+          "term agreement 0.44",
+          "diagnosis supports package name 0.25"
+        ],
+        "unconfirmed_attributes": []
+      }
+    ],
+    "review_flags": []
   },
   "completeness": {
     "status": "INCOMPLETE",

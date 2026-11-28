@@ -11,7 +11,8 @@ from pkg_engine.engine import evaluate, rfi_draft
 from pkg_engine.report import to_output, to_table
 
 HERE = Path(__file__).parent
-SAMPLE = HERE.parent / "squad2_pii" / "samples" / "masked_output.json"
+SQUAD2_SAMPLE = HERE.parent / "squad2_pii" / "samples" / "masked_output.json"
+SAMPLE = SQUAD2_SAMPLE if SQUAD2_SAMPLE.is_file() else HERE / "tests" / "fixtures" / "masked_output.json"
 
 
 def load(path):

@@ -17,6 +17,22 @@ def to_output(result, case_id=None):
     """requirement_id numbers rows within one case; it is not a permanent ID."""
     selected = result["selected_package"]
     required = [c for c in result["checklist"] if c["verification"] != "PROVISIONAL"]
+    candidates = []
+    for term in result.get("term_matches", []):
+        for candidate in term.get("candidates", []):
+            candidates.append({
+                "input": term["input"],
+                "term_match_status": term["status"],
+                "package_code": candidate["package_code"],
+                "package_name": candidate["package_name"],
+                "procedure_code": candidate["procedure_code"],
+                "procedure_name": candidate["procedure_name"],
+                "confidence_score": candidate["confidence"],
+                "reasons": candidate["reasons"],
+                "unconfirmed_attributes": candidate["unconfirmed_attributes"],
+            })
+    confidence = (selected["confidence"] if selected else
+                  max((c["confidence_score"] for c in candidates), default=None))
     output = {
         "case_id": str(case_id or result["case_number"]),
         "case_number": result["case_number"],
@@ -25,7 +41,10 @@ def to_output(result, case_id=None):
         "procedure": split_code(result["procedures"][0])[0] if result["procedures"] else None,
         "hospital_name": result.get("hospital_name"),
         "package_match": {"status": result["match_status"],
-                          "selected_package_code": selected["package_code"] if selected else None},
+                          "selected_package_code": selected["package_code"] if selected else None,
+                          "confidence_score": confidence,
+                          "candidates": candidates,
+                          "review_flags": result.get("review_flags", [])},
         "completeness": {"status": result["document_status"],
                          "requirements": [_row(i, c) for i, c in enumerate(required, 1)]},
     }

@@ -7,7 +7,53 @@
   "hospital_name": "VIDISHA CARE HOSPITAL",
   "package_match": {
     "status": "MATCHED",
-    "selected_package_code": "SG017"
+    "selected_package_code": "SG017",
+    "confidence_score": 0.75,
+    "candidates": [
+      {
+        "input": "Laparoscopic Appendicectomy",
+        "term_match_status": "MATCHED",
+        "package_code": "SG017",
+        "package_name": "Appendicectomy",
+        "procedure_code": "SG017B",
+        "procedure_name": "Lap- Appendicectomy",
+        "confidence_score": 0.75,
+        "reasons": [
+          "term agreement 1.00",
+          "diagnosis supports package name 0.00"
+        ],
+        "unconfirmed_attributes": []
+      },
+      {
+        "input": "Laparoscopic Appendicectomy",
+        "term_match_status": "MATCHED",
+        "package_code": "SG0106",
+        "package_name": "Subtotal Colectomy",
+        "procedure_code": "SG0106B",
+        "procedure_name": "Lap",
+        "confidence_score": 0.417,
+        "reasons": [
+          "term agreement 0.56",
+          "diagnosis supports package name 0.00"
+        ],
+        "unconfirmed_attributes": []
+      },
+      {
+        "input": "Laparoscopic Appendicectomy",
+        "term_match_status": "MATCHED",
+        "package_code": "SG020",
+        "package_name": "Total Colectomy",
+        "procedure_code": "SG020B",
+        "procedure_name": "Lap",
+        "confidence_score": 0.417,
+        "reasons": [
+          "term agreement 0.56",
+          "diagnosis supports package name 0.00"
+        ],
+        "unconfirmed_attributes": []
+      }
+    ],
+    "review_flags": []
   },
   "completeness": {
     "status": "INCOMPLETE",

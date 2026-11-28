@@ -1,0 +1,27 @@
+[
+  {
+    "case_id": "Patient_01",
+    "doc_id": "Discharge_Summary_01",
+    "masked_text": "Age / Sex: 60 / Male\nDiagnosis:\nMature cataract\nProcedure:\nPhaco with foldable hydrophobic acrylic IOL"
+  },
+  {
+    "case_id": "Patient_02",
+    "doc_id": "Discharge_Summary_02",
+    "masked_text": "Age / Sex: 64 / Female\nDiagnosis:\nMature cataract\nProcedure:\nPhaco with foldable hydrophobic acrylic IOL"
+  },
+  {
+    "case_id": "Patient_03",
+    "doc_id": "Discharge_Summary_03",
+    "masked_text": "Age / Sex: 71 / Male\nDiagnosis:\nCataract\nProcedure:\nPhaco with foldable hydrophobic acrylic IOL"
+  },
+  {
+    "case_id": "Patient_04",
+    "doc_id": "Discharge_Summary_04",
+    "masked_text": "Age / Sex: 58 / Female\nDiagnosis:\nMature cataract\nProcedure:\nPhaco with foldable hydrophobic acrylic IOL"
+  },
+  {
+    "case_id": "Patient_05",
+    "doc_id": "Discharge_Summary_05",
+    "masked_text": "Age / Sex: 66 / Male\nDiagnosis:\nRetinal detachment\nProcedure:\nPars plana vitrectomy"
+  }
+]

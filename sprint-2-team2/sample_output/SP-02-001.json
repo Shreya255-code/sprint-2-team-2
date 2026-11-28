@@ -7,7 +7,39 @@
   "hospital_name": "ASG EYE HOSPITALS",
   "package_match": {
     "status": "MATCHED",
-    "selected_package_code": "SE020"
+    "selected_package_code": "SE020",
+    "confidence_score": 1.0,
+    "candidates": [
+      {
+        "input": "RIGHT EYE Phacoemulsification with Foldable Hydrophobic Acrylic IOL",
+        "term_match_status": "MATCHED",
+        "package_code": "SE020",
+        "package_name": "Cataract surgery",
+        "procedure_code": "SE020A",
+        "procedure_name": "Phaco emulsification with foldable hydrophobic acrylic IOL",
+        "confidence_score": 1.0,
+        "reasons": [
+          "term agreement 1.00",
+          "diagnosis supports package name 1.00"
+        ],
+        "unconfirmed_attributes": []
+      },
+      {
+        "input": "RIGHT EYE Phacoemulsification with Foldable Hydrophobic Acrylic IOL",
+        "term_match_status": "MATCHED",
+        "package_code": "SE024",
+        "package_name": "Secondary IOL / IOL Exchange / Explant",
+        "procedure_code": "SE024A",
+        "procedure_name": "Secondary IOL / IOL Exchange / Explant",
+        "confidence_score": 0.152,
+        "reasons": [
+          "term agreement 0.20",
+          "diagnosis supports package name 0.00"
+        ],
+        "unconfirmed_attributes": []
+      }
+    ],
+    "review_flags": []
   },
   "completeness": {
     "status": "INCOMPLETE",

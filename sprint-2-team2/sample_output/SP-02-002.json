@@ -7,7 +7,53 @@
   "hospital_name": "SHREE RAM HOSPITAL",
   "package_match": {
     "status": "MATCHED",
-    "selected_package_code": "SG050"
+    "selected_package_code": "SG050",
+    "confidence_score": 0.917,
+    "candidates": [
+      {
+        "input": "Right Inguinal Hernia Repair - Open",
+        "term_match_status": "MATCHED",
+        "package_code": "SG050",
+        "package_name": "Groin Hernia Repair",
+        "procedure_code": "SG050A",
+        "procedure_name": "Inguinal - Open",
+        "confidence_score": 0.917,
+        "reasons": [
+          "term agreement 1.00",
+          "diagnosis supports package name 0.67"
+        ],
+        "unconfirmed_attributes": []
+      },
+      {
+        "input": "Right Inguinal Hernia Repair - Open",
+        "term_match_status": "MATCHED",
+        "package_code": "SG050",
+        "package_name": "Groin Hernia Repair",
+        "procedure_code": "SG050C",
+        "procedure_name": "Femoral - Open",
+        "confidence_score": 0.737,
+        "reasons": [
+          "term agreement 0.76",
+          "diagnosis supports package name 0.67"
+        ],
+        "unconfirmed_attributes": []
+      },
+      {
+        "input": "Right Inguinal Hernia Repair - Open",
+        "term_match_status": "MATCHED",
+        "package_code": "SG053",
+        "package_name": "Hiatus Hernia Repair / Fundoplication",
+        "procedure_code": "SG053A",
+        "procedure_name": "Hiatus Hernia Repair - Open",
+        "confidence_score": 0.474,
+        "reasons": [
+          "term agreement 0.55",
+          "diagnosis supports package name 0.25"
+        ],
+        "unconfirmed_attributes": []
+      }
+    ],
+    "review_flags": []
   },
   "completeness": {
     "status": "INCOMPLETE",

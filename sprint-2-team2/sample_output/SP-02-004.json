@@ -7,7 +7,53 @@
   "hospital_name": "SAI MULTISPECIALITY HOSPITAL",
   "package_match": {
     "status": "MATCHED",
-    "selected_package_code": "SG039"
+    "selected_package_code": "SG039",
+    "confidence_score": 0.75,
+    "candidates": [
+      {
+        "input": "Laparoscopic Cholecystectomy Without CBD Exploration",
+        "term_match_status": "MATCHED",
+        "package_code": "SG039",
+        "package_name": "Cholecystectomy",
+        "procedure_code": "SG039C",
+        "procedure_name": "Without Exploration of CBD - Lap",
+        "confidence_score": 0.75,
+        "reasons": [
+          "term agreement 1.00",
+          "diagnosis supports package name 0.00"
+        ],
+        "unconfirmed_attributes": []
+      },
+      {
+        "input": "Laparoscopic Cholecystectomy Without CBD Exploration",
+        "term_match_status": "MATCHED",
+        "package_code": "SG0106",
+        "package_name": "Subtotal Colectomy",
+        "procedure_code": "SG0106B",
+        "procedure_name": "Lap",
+        "confidence_score": 0.314,
+        "reasons": [
+          "term agreement 0.42",
+          "diagnosis supports package name 0.00"
+        ],
+        "unconfirmed_attributes": []
+      },
+      {
+        "input": "Laparoscopic Cholecystectomy Without CBD Exploration",
+        "term_match_status": "MATCHED",
+        "package_code": "SG020",
+        "package_name": "Total Colectomy",
+        "procedure_code": "SG020B",
+        "procedure_name": "Lap",
+        "confidence_score": 0.314,
+        "reasons": [
+          "term agreement 0.42",
+          "diagnosis supports package name 0.00"
+        ],
+        "unconfirmed_attributes": []
+      }
+    ],
+    "review_flags": []
   },
   "completeness": {
     "status": "INCOMPLETE",

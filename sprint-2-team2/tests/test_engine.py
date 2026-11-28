@@ -1,4 +1,5 @@
 from datetime import date
+from pathlib import Path
 
 import pytest
 
@@ -9,6 +10,7 @@ from pkg_engine.catalog import Catalog
 from pkg_engine.engine import evaluate, rfi_draft
 from pkg_engine.matcher import match_term
 from pkg_engine.report import to_output, to_table
+import import_sample_output
 
 
 @pytest.fixture(scope="module")
@@ -42,6 +44,11 @@ def test_unspecified_variant_is_not_auto_selected(cat):
     r = evaluate(cat, make(["appendicitis"], ["appendicectomy"]))
     assert r["match_status"] == "AMBIGUOUS" and r["selected_package"] is None
     assert r["document_status"] == "NOT_CHECKED" and "SG017" in rfi_draft(r)
+    out = to_output(r)
+    assert out["package_match"]["status"] == "AMBIGUOUS"
+    assert out["package_match"]["confidence_score"] is not None
+    assert len(out["package_match"]["candidates"]) >= 2
+    assert out["package_match"]["review_flags"]
 
 
 def test_unknown_and_empty_do_not_match(cat):
@@ -72,10 +79,15 @@ def test_lab_validity(cat, collected, status):
 
 
 def test_sprint1_samples(cat):
-    results = {c["case_number"]: evaluate(cat, c) for c in load(SAMPLE)}
+    sample = Path(__file__).parent / "fixtures" / "masked_output.json"
+    results = {c["case_number"]: evaluate(cat, c) for c in load(sample)}
     for n in "1234":
         assert results[f"Patient_0{n}"]["selected_package"]["procedure_code"] == "SE020A"
     assert results["Patient_05"]["match_status"] != "MATCHED"        # vitrectomy needs a person
+
+
+def test_offline_demo_has_a_default_sample():
+    assert SAMPLE.is_file()
 
 
 class FakeDB:
@@ -139,7 +151,11 @@ def test_output_format(cat):
     out = to_output(evaluate(cat, make(["cataract"], ["phaco foldable hydrophobic acrylic IOL"])), case_id=7)
     assert list(out) == ["case_id", "case_number", "medication_number", "diagnosis", "procedure",
                          "hospital_name", "package_match", "completeness"] and out["case_id"] == "7"
-    assert out["package_match"] == {"status": "MATCHED", "selected_package_code": "SE020"}
+    assert out["package_match"]["status"] == "MATCHED"
+    assert out["package_match"]["selected_package_code"] == "SE020"
+    assert out["package_match"]["confidence_score"] > 0
+    assert out["package_match"]["candidates"][0]["confidence_score"] > 0
+    assert "review_flags" in out["package_match"]
     rows = {r["document_name"]: r for r in out["completeness"]["requirements"]}
     assert rows["Discharge summary"]["status"] == "PRESENT" and "reason" not in rows["Discharge summary"]
     assert rows["Patient photograph"]["reason"] and rows["Patient photograph"]["source_reference"]
@@ -200,3 +216,70 @@ def test_a_doubtful_case_never_keeps_a_package(cat, procedures, documents):
     assert r["match_status"] != "MATCHED" and r["selected_package"] is None
     assert r["document_status"] == "NOT_CHECKED" and r["checklist"] == []
     assert to_output(r)["package_match"]["selected_package_code"] is None
+
+
+class FakeImportDB:
+    def __init__(self, cases):
+        self.cases = cases
+        self.writes = []
+
+    def table(self, name):
+        assert name == "claims_cases"
+        db = self
+
+        class Query:
+            def __init__(self):
+                self.rows = list(db.cases)
+                self.update_data = None
+
+            def select(self, *_):
+                return self
+
+            def in_(self, column, values):
+                self.rows = [row for row in self.rows if row.get(column) in values]
+                return self
+
+            def eq(self, column, value):
+                self.rows = [row for row in self.rows if row.get(column) == value]
+                return self
+
+            def update(self, data):
+                self.update_data = data
+                return self
+
+            def execute(self):
+                if self.update_data is not None:
+                    for row in self.rows:
+                        row.update(self.update_data)
+                    db.writes.append(self.update_data)
+                return type("Response", (), {"data": self.rows})
+        return Query()
+
+
+def sample_output(case_number="C1"):
+    return {"case_id": case_number, "case_number": case_number,
+            "package_match": {"confidence_score": 0.8, "candidates": [], "review_flags": []},
+            "completeness": {"requirements": []}}
+
+
+def test_sample_importer_writes_nested_output_and_preserves_summary():
+    case = {"case_id": "uuid-1", "case_number": "C1",
+            "case_audit_summary": {"other_team": {"keep": True},
+                                   "sprint2_team2": {"written_columns": {"package_code": "SE020"}}}}
+    sb = FakeImportDB([case])
+    payload = sample_output()
+    import_sample_output.import_outputs(sb, [(Path("C1.json"), payload)], apply=True)
+    summary = case["case_audit_summary"]
+    assert case["case_id"] == "uuid-1"
+    assert summary["other_team"] == {"keep": True}
+    assert summary["sprint2_team2"]["written_columns"] == {"package_code": "SE020"}
+    assert summary["sprint2_team2"]["output"] == payload
+    assert import_sample_output.import_outputs(sb, [(Path("C1.json"), payload)], apply=True) == 0
+    assert len(sb.writes) == 1
+
+
+def test_sample_importer_missing_case_aborts_before_writing():
+    sb = FakeImportDB([])
+    with pytest.raises(ValueError, match="No claims_cases row found"):
+        import_sample_output.import_outputs(sb, [(Path("C1.json"), sample_output())], apply=True)
+    assert sb.writes == []
