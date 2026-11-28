@@ -23,14 +23,23 @@ not test Squad 3's extraction.
 
 ## Output format
 `case_id`, `case_number`, `medication_number` (MRN), `diagnosis`, `procedure`, `hospital_name`, `package_match`, `completeness.requirements[]` (see `pkg_engine/report.py`).
-In Supabase it is stored at `case_audit_summary.sprint2_team2.output`.
+The engine-generated version is stored at `case_audit_summary.sprint2_team2.output` and
+`package_matching_results`.
 
 `python run_bundles.py <bundle_dir> <patients_dir> <output_dir>` runs on Sprint 1 output files and writes one JSON per patient.
 
 ## Database
 Reads cases at `pipeline_stage = COMPLETED`. Writes `package_code`, `primary_diagnosis`,
-`requested_procedure`, `missing_mandatory_docs`, `case_audit_summary.sprint2_team2`.
-No migration needed. Values set by someone else are not overwritten.
+`requested_procedure`, `missing_mandatory_docs`, `package_matching_results` (JSONB), and
+`case_audit_summary.sprint2_team2`. Before the first database write, apply
+`supabase/migrations/20261128_add_package_matching_results.sql` in the Supabase SQL Editor.
+Values set by someone else are not overwritten by `db_runner.py`.
+
+To load the per-case JSON files in `sample_output/`, set `SUPABASE_URL` and
+`SUPABASE_SERVICE_KEY`, then run `python import_sample_output.py` for a preview or
+`python import_sample_output.py --apply` to write the files. The importer matches by
+`case_number`, stores the database UUID in `case_id`, and skips rows that already have
+`package_matching_results`; use `--apply --force` only to replace those values.
 
 ## How matching works
 1. Normalize: abbreviations, OCR slips, anaesthesia wording, laterality (`config/terminology.json`).

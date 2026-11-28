@@ -45,7 +45,9 @@ def updates_for(case_row, result):
         update["missing_mandatory_docs"] = result["missing_mandatory_docs"]
     else:
         update["missing_mandatory_docs"] = []
-    audit[KEY] = {**result, "output": to_output(result, case_row.get("case_id")), "written_columns": written}
+    output = to_output(result, case_row.get("case_id"))
+    update["package_matching_results"] = output
+    audit[KEY] = {**result, "output": output, "written_columns": written}
     update["case_audit_summary"] = audit
     return update
 
