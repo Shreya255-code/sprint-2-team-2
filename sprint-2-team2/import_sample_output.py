@@ -3,7 +3,7 @@
 Preview without writes:
     python import_sample_output.py
 
-Write rows whose package_matching_results value is empty:
+Write rows that are not already present:
     python import_sample_output.py --apply
 
 Replace existing values as well:
@@ -41,32 +41,28 @@ def load_outputs(directory=OUTPUT_DIR):
 
 
 def import_outputs(sb, outputs, apply=False, force=False):
-    rows = (sb.table("claims_cases")
-            .select("case_id, case_number, package_matching_results")
-            .eq("pipeline_stage", "COMPLETED").execute().data or [])
-    by_number = {}
-    for row in rows:
-        number = row.get("case_number")
-        if number in by_number:
-            raise ValueError(f"Multiple completed database rows have case_number {number!r}")
-        by_number[number] = row
+    rows = (sb.table("package_matching_records")
+            .select("case_number").execute().data or [])
+    existing = {row["case_number"] for row in rows}
 
     saved = 0
     for path, item in outputs:
         number = item["case_number"]
-        row = by_number.get(number)
-        if row is None:
-            print(f"{number}: no completed claims_cases row; skipped", file=sys.stderr)
-            continue
-        if row.get("package_matching_results") and not force:
-            print(f"{number}: already has package_matching_results; skipped (use --force to replace)")
+        if number in existing and not force:
+            print(f"{number}: already exists; skipped (use --force to replace)")
             continue
 
-        payload = dict(item)
-        payload["case_id"] = row["case_id"]
+        payload = {
+            "case_number": number,
+            "matching_output": item,
+            "source_file": path.name,
+        }
         if apply:
-            (sb.table("claims_cases").update({"package_matching_results": payload})
-             .eq("case_id", row["case_id"]).execute())
+            if number in existing:
+                sb.table("package_matching_records").upsert(payload, on_conflict="case_number").execute()
+            else:
+                sb.table("package_matching_records").insert(payload).execute()
+                existing.add(number)
         saved += 1
         print(f"{number}: {'saved' if apply else 'ready to save'} from {path.name}")
     print(f"{saved} output(s) {'written' if apply else 'matched (dry run; no database changes)'}")
