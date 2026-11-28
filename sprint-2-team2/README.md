@@ -25,7 +25,7 @@ not test Squad 3's extraction.
 `case_id`, `case_number`, `medication_number` (MRN), `diagnosis`, `procedure`, `hospital_name`, `package_match`, `completeness.requirements[]` (see `pkg_engine/report.py`).
 In Supabase it is stored at `case_audit_summary.sprint2_team2.output`.
 
-`python run_bundles.py <bundle_dir> <patients_dir> out.json` runs on Sprint 1 output files.
+`python run_bundles.py <bundle_dir> <patients_dir> <output_dir>` runs on Sprint 1 output files and writes one JSON per patient.
 
 ## Database
 Reads cases at `pipeline_stage = COMPLETED`. Writes `package_code`, `primary_diagnosis`,

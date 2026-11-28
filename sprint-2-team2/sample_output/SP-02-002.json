@@ -1,0 +1,34 @@
+{
+  "case_id": "SP-02-002",
+  "case_number": "SP-02-002",
+  "medication_number": "MRN-3391",
+  "diagnosis": "Right Inguinal Hernia (Indirect)",
+  "procedure": "Right Inguinal Hernia Repair - Open",
+  "hospital_name": "SHREE RAM HOSPITAL",
+  "package_match": {
+    "status": "MATCHED",
+    "selected_package_code": "SG050"
+  },
+  "completeness": {
+    "status": "INCOMPLETE",
+    "requirements": [
+      {
+        "requirement_id": "REQ-001",
+        "document_name": "Patient photograph",
+        "status": "MISSING",
+        "reason": "no matching document in the case",
+        "source_reference": "NHA Claims Adjudication Manual 2.0, section 4.5.1"
+      },
+      {
+        "requirement_id": "REQ-002",
+        "document_name": "Clinical documents supporting the diagnosis",
+        "status": "PRESENT"
+      },
+      {
+        "requirement_id": "REQ-003",
+        "document_name": "Discharge summary",
+        "status": "PRESENT"
+      }
+    ]
+  }
+}

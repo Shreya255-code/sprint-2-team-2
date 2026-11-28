@@ -1,0 +1,39 @@
+{
+  "case_id": "SP-02-003",
+  "case_number": "SP-02-003",
+  "medication_number": "MRN-5520",
+  "diagnosis": "Acute Appendicitis",
+  "procedure": "Laparoscopic Appendicectomy",
+  "hospital_name": "VIDISHA CARE HOSPITAL",
+  "package_match": {
+    "status": "MATCHED",
+    "selected_package_code": "SG017"
+  },
+  "completeness": {
+    "status": "INCOMPLETE",
+    "requirements": [
+      {
+        "requirement_id": "REQ-001",
+        "document_name": "Patient photograph",
+        "status": "MISSING",
+        "reason": "no matching document in the case",
+        "source_reference": "NHA Claims Adjudication Manual 2.0, section 4.5.1"
+      },
+      {
+        "requirement_id": "REQ-002",
+        "document_name": "Clinical documents supporting the diagnosis",
+        "status": "PRESENT"
+      },
+      {
+        "requirement_id": "REQ-003",
+        "document_name": "Discharge summary",
+        "status": "PRESENT"
+      }
+    ],
+    "recommended_not_mandatory": [
+      "Signed surgical consent",
+      "USG abdomen report",
+      "Histopathology report"
+    ]
+  }
+}

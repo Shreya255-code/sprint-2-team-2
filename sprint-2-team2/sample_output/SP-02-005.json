@@ -1,0 +1,39 @@
+{
+  "case_id": "SP-02-005",
+  "case_number": "SP-02-005",
+  "medication_number": "MRN-1678",
+  "diagnosis": "Right Intertrochanteric Fracture of Femur",
+  "procedure": "ORIF Intertrochanteric Fracture with Dynamic Hip Screw",
+  "hospital_name": "APOLLO ORTHO CENTRE",
+  "package_match": {
+    "status": "MATCHED",
+    "selected_package_code": "SB019"
+  },
+  "completeness": {
+    "status": "INCOMPLETE",
+    "requirements": [
+      {
+        "requirement_id": "REQ-001",
+        "document_name": "Patient photograph",
+        "status": "MISSING",
+        "reason": "no matching document in the case",
+        "source_reference": "NHA Claims Adjudication Manual 2.0, section 4.5.1"
+      },
+      {
+        "requirement_id": "REQ-002",
+        "document_name": "Clinical documents supporting the diagnosis",
+        "status": "PRESENT"
+      },
+      {
+        "requirement_id": "REQ-003",
+        "document_name": "Discharge summary",
+        "status": "PRESENT"
+      }
+    ],
+    "recommended_not_mandatory": [
+      "Operative notes",
+      "X-ray report (before and after surgery)",
+      "Implant sticker / invoice"
+    ]
+  }
+}

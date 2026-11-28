@@ -1,5 +1,6 @@
 """Package matching on Sprint 1 output files (Squad 3 combined bundle, one <case_number>.json each).
-   python run_bundles.py <bundle_dir> <patients_dir> <output.json>
+   python run_bundles.py <bundle_dir> <patients_dir> <output_dir>
+Writes one <case_number>.json per patient into <output_dir>.
 The bundles carry no document text, so text is read from the original documents in <patients_dir>
 (needs pdftotext and tesseract; no PII masking, so synthetic data only)."""
 import json
@@ -19,14 +20,17 @@ def key(name):
     return re.sub(r"(_\d+_)(?=\.\w+$)", "", name).lower()
 
 
-def main(bundle_dir, patients_dir, output_file):
+def main(bundle_dir, patients_dir, output_dir):
     files = {}
     for path in Path(patients_dir).rglob("*"):
         if path.suffix.lower() in KINDS:
             if key(path.name) in files:
                 sys.exit(f"Two files named {path.name}: cannot tell which belongs to the case")
             files[key(path.name)] = path
-    cat, outputs = Catalog(), []
+    cat, out = Catalog(), Path(output_dir)
+    if out.resolve() == Path(bundle_dir).resolve():
+        sys.exit("Output folder must differ from the Sprint 1 folder, or its files would be overwritten")
+    out.mkdir(parents=True, exist_ok=True)
     for bundle_path in sorted(Path(bundle_dir).glob("*.json")):
         bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
         names = [d["file_name"] for d in bundle["documents"]]
@@ -35,9 +39,10 @@ def main(bundle_dir, patients_dir, output_file):
             sys.exit(f"{bundle['case_number']}: original document(s) not found: {', '.join(absent)}")
         docs = [(n, read(files[key(n)])) for n in names]
         result = evaluate(cat, build_case(bundle["case_number"], docs, bundle))
-        outputs.append(to_output(result))
-        print(f"\n{to_table(outputs[-1])}\n flags: {result['review_flags']}")
-    Path(output_file).write_text(json.dumps(outputs, indent=2, ensure_ascii=False), encoding="utf-8")
+        output = to_output(result)
+        target = out / f"{bundle_path.stem}.json"
+        target.write_text(json.dumps(output, indent=2, ensure_ascii=False), encoding="utf-8")
+        print(f"\n{to_table(output)}\n flags: {result['review_flags']}\n saved: {target}")
 
 
 if __name__ == "__main__":
